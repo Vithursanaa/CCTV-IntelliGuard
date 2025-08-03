@@ -1,6 +1,6 @@
-# AI-Powered Human Detection Module for CCTV Systems
+# CCTV IntelliGuard
 
-A smart hardware module that connects to any existing CCTV camera and performs **real-time human detection** using edge AI. This system can automatically trigger alarms, save video clips, or send alerts to a designated phone number or messaging app based on specific conditions.
+A smart hardware module that connects to any existing CCTV camera and performs real-time human detection using edge AI (AI algorithms directly on edge devices, like smartphones or IoT sensors, allowing real-time processing and decision-making without cloud reliance). This system can automatically trigger alarms, save video clips with timestamp, or send alerts to a designated phone number or messaging app based on specific conditions.
 
 ---
 
@@ -14,16 +14,15 @@ Most existing CCTV systems continuously record footage without intelligence. Thi
 
 ## 🎯 Solution
 
-Attach this **AI-based external hardware** to any USB or IP CCTV camera to:
+Attach this **AI-based external hardware** to CCTV camera to:
 - Detects human presence and captures a photo/video snippet of the individual.
+- Sends captured images or video to registered mobile devices and directly to the device
 - Triggers an alarm alert for unauthorized entries.
-- Sends captured images or video to registered mobile devices and directly to the 	Responsible Director of the Institute.
 - Includes a manual alarm off switch for authorized overrides.
-- Monitors only during off-time (non-working hours) of the university.
 
 ---
 
-Project Goals
+## Project Goals
 
 - Automate monitoring during off-hours.
 - Provide visual proof of entry (photo/video).
@@ -35,16 +34,17 @@ Project Goals
 
 ## 🚀 Features
 
-✅ Real-time detection of human motion  
-✅ Works with existing **USB or IP cameras (RTSP supported)**  
-✅ Sends video clip with **timestamp** to a designated device  
-✅ **Triggers an alarm** during restricted hours until manually turned off  
-✅ Minimal hardware cost using **Raspberry Pi + Coral USB Accelerator**  
-✅ Optional support for **Telegram alerts or Email notifications**
-
----
+- Real-time detection of human motion  
+- Works with existing cameras
+- Sends video clip / photos with **timestamp** to a designated device  
+- **Triggers an alarm** during restricted hours until manually turned off  
+- Minimal hardware cost using **Raspberry Pi ( May be in future adds Coral USB Accelerator (can accelerate machine learning models)**
+<img width="80" height="80" alt="image" src="https://github.com/user-attachments/assets/80b1483b-ab3e-4f76-a7f2-454aae308a86" />
+ 
+ ---
 
 ## 🧰 Hardware Requirements
+
 
 | Hardware            | Purpose                                              |
 |---------------------|------------------------------------------------------|
@@ -54,82 +54,49 @@ Project Goals
 | Push Button         | Manual alarm off override                            |
 | Smartphone / Tablet | To receive image or video alert                      |
 
-Use existing CCTV cameras if they support IP streaming.
-
 ---
 
-## 🛠️ Software Stack
+## 🛠️ Software Stack ( Not finalize )
+
 
 | Software / Library         | Role                                      |
 |----------------------------|-------------------------------------------|
 | Python / C++ / Node.js     | Backend logic and camera interface        |
 | OpenCV                     | Human detection and image processing      |
-| Twilio / Telegram API      | Send alerts and images to mobile devices  |
-| FFmpeg                     | For video clipping and compression        |
+| Twilio / Telegram API      | Sending automated alerts or messages in   |
+|                            | your applications                         |
+| FFmpeg                     |  For video clipping and compression       |
 | MQTT / HTTP Server         | Communication between devices             |
 | Real-Time Clock Scheduler  | To set active monitoring hours            |
 
+- Frigate: Focused on efficient recording (clips and snapshots) only when motion and objects (like humans, cars) are detected.
+  
 ---
 
 ## 🏗️ System Architecture
-           ┌──────────────────────┐
-           │ CCTV Camera (USB/IP) │
-           └──────────┬───────────┘
-                      |
-                      ▼
-        ┌───────────────────────────┐
-        │ Raspberry Pi + Coral Edge │
-        │ with Frigate Detection    │
-        └────────────┬──────────────┘
-                     │
-              ┌──────▼─────────┐
-              │ Human Detected │
-              └──────┬─────────┘
-                     │
-        ┌────────────▼─────────────┐
-        │ Save Clip + Timestamp    │
-        └────────────┬─────────────┘
-                     │
-        ┌────────────▼─────────────┐
-        │ Send Alert (Telegram)    │
-        └────────────┬─────────────┘
-                     │
-        ┌────────────▼────────────────────┐
-        │ If Restricted Hours             │
-        │ Ring Alarm Until Turned Off     │
-        └─────────────────────────────────┘
+
+
+<img width="300" height="1000" alt="Blank diagram" src="https://github.com/user-attachments/assets/5be20669-8b63-477c-8cda-1f50001fc7dd" />
 
 ---
 
-Setup Instructions
+## Real-World Application
 
-1. Install required packages (OpenCV, Python libraries, etc.).
-2. Connect your camera module or IP stream to your device.
-3. Configure working hours in the code to enable after-hours monitoring.
-4. Integrate alert system with Twilio/Telegram using API credentials.
-5. Deploy the system on Raspberry Pi or other microcontroller.
-6. Test alert, video capture, and notification features thoroughly.
-
+- Designed to be deployed in university / office / school premises for surveillance.
+- Helps in identifying unauthorized entries or suspicious activities. 
+- Integrating an automated alarm system tailored for malls and public spaces to 
+reduce the workload and required number of security personnel
+  
 ---
 
-Real-World Application
-
-- Designed to be deployed in university premises for post-classroom surveillance.
-- Helps in identifying unauthorized entries or suspicious activities.
-- Can be extended to lab areas, equipment rooms, and hostel corridors at the night hours.
-
----
-
-Future Improvements
+## Future Improvements
 
 - Face recognition for known vs unknown individuals.
 - Remote access to live feed via secure portal.
-- Battery backup and offline storage.
-- Integration with access control (RFID, biometric).
 
 ---
 
-Status
+## Status
 
 -Stage 1: Initial concept & hardware planning  
 -Stage 2: Camera setup and motion detection  
@@ -138,153 +105,109 @@ Status
 
 ---
 
-# 📅 10-Week Project Timeline
+## 📅 Project Timeline – 14 Weeks
 
-This timeline outlines the structured development of the **AI-Powered Human Detection Module for CCTV Systems**, with a balanced weekly workload. Each week builds upon the last, leading to a fully functional, deployable, and scalable surveillance solution.
-
----
-
-## 🗓️ Weekly Development Plan
-
-### **Week 1: Project Kickoff & Environment Setup**
-
-**Goals:**
-- Define project requirements and install core tools
-
-**Tasks:**
-- [ ] Finalize system architecture
-- [ ] List hardware/software requirements
-- [ ] Set up Raspberry Pi OS with Python
-- [ ] Enable SSH, configure Wi-Fi, and install essential packages
-- [ ] Initialize Git repository and folder structure
+This section outlines the week-by-week development plan for the CCTV IntelliGuard system, focused on real-time human detection, video clipping, alerting, and scheduling.
 
 ---
 
-### **Week 2: Camera Setup & Basic Video Stream**
+### 🕐 Week 1: Finalize Requirements
 
-**Goals:**
-- Connect CCTV (USB/IP) and stream video
-
-**Tasks:**
-- [ ] Connect USB or RTSP-based IP camera
-- [ ] Stream live video using OpenCV
-- [ ] Display frame with timestamp overlay
-- [ ] Test video feed performance (FPS, latency)
+* Define system features and workflow
+* Determine active hours, alert rules, and UI expectations
+* Confirm software stack and hardware specifications
 
 ---
 
-### **Week 3: Motion Detection & Video Capture**
+### 🧾 Week 2: Procure Hardware
 
-**Goals:**
-- Implement motion detection and clip saving
-
-**Tasks:**
-- [ ] Detect motion using frame differencing
-- [ ] Capture short video clips on motion detection
-- [ ] Add timestamp to filenames
-- [ ] Use FFmpeg for video compression
+* Purchase Raspberry Pi, Camera Module, Buzzer, Push Button, SD card, and other essentials
 
 ---
 
-### **Week 4: Human Detection Using Coral TPU**
+### 🛠️ Week 3: Setup Raspberry Pi
 
-**Goals:**
-- Detect humans using Edge AI
-
-**Tasks:**
-- [ ] Install Coral Edge TPU runtime
-- [ ] Integrate Frigate or TFLite human detection model
-- [ ] Display bounding boxes for detected persons
-- [ ] Filter out non-human movement
+* Flash Raspberry Pi OS
+* Install necessary libraries: OpenCV, FFmpeg, etc.
+* Validate camera feed and Pi GPIOs
 
 ---
 
-### **Week 5: Alarm System & Push Button Integration**
+### 👁️ Week 4: Motion Detection (OpenCV)
 
-**Goals:**
-- Add buzzer alarm and manual override
-
-**Tasks:**
-- [ ] Connect buzzer to GPIO pin
-- [ ] Add push button for alarm control
-- [ ] Trigger alarm on detection during off-hours
-- [ ] Implement GPIO debounce for button
+* Frame differencing or background subtraction
+* Filter out irrelevant motion (e.g., light, leaves)
 
 ---
 
-### **Week 6: Real-Time Clock (RTC) & Schedule Logic**
+### 🚶‍♂️ Week 5: Human Detection (Edge AI)
 
-**Goals:**
-- Enable off-hour surveillance only
-
-**Tasks:**
-- [ ] Install RTC module
-- [ ] Configure restricted monitoring hours
-- [ ] Enable detection only during specified times
-- [ ] Log all detection events with timestamps
+* Integrate MobileNet SSD or YOLO-tiny
+* Classify objects and filter only human presence
 
 ---
 
-### **Week 7: Alert System (Telegram / Twilio Integration)**
+### 🔊 Week 6: Alarm Trigger System
 
-**Goals:**
-- Notify security via messaging apps
-
-**Tasks:**
-- [ ] Set up Telegram Bot or Twilio API
-- [ ] Send photo/video alert with timestamp
-- [ ] Add retry and error handling
-- [ ] Log alerts and delivery status
+* Activate buzzer during restricted hours on human detection
+* GPIO programming for buzzer control
 
 ---
 
-### **Week 8: Storage, Auto-Start & Optimization**
+### 🛑 Week 7: Manual Override System
 
-**Goals:**
-- Make the system persistent and efficient
-
-**Tasks:**
-- [ ] Save media clips in organized folders
-- [ ] Set up auto-start using systemd or cron
-- [ ] Optimize detection threshold and performance
-- [ ] Add exception handling for API/camera errors
+* Add physical push button to disable buzzer
+* Test debounce and button state reading via GPIO
 
 ---
 
-### **Week 9: Field Testing & Deployment**
+### 🎥 Week 8: Timestamped Video/Image Clip
 
-**Goals:**
-- Deploy and validate in a real environment
-
-**Tasks:**
-- [ ] Deploy in a selected university room or lab
-- [ ] Conduct tests during night/off-hours
-- [ ] Collect feedback and adjust parameters
-- [ ] Evaluate detection reliability and false alerts
+* Use FFmpeg to save short video or snapshot on detection
+* Save with human-readable timestamp for traceability
 
 ---
 
-### **Week 10: Documentation & Final Review**
+### ⏰ Week 9: RTC-Based Scheduling
 
-**Goals:**
-- Finalize the system and plan future scalability
-
-**Tasks:**
-- [ ] Write installation and usage documentation
-- [ ] Create demo video (optional)
-- [ ] Document code and configuration files
-- [ ] Suggest enhancements and deployment roadmap
+* Implement real-time monitoring scheduler
+* Monitor system only during configured restricted hours
 
 ---
 
-## 🚀 Future Enhancements
+### 📲 Week 10: Alert Notification System
 
-- Face recognition for authorized personnel
-- Remote access via secure web interface
-- Battery backup and offline clip storage
-- Integration with RFID or biometric systems
-- Cloud alert syncing and mobile dashboard
+* Integrate Telegram Bot or Twilio API
+* Send image/video to registered users’ devices instantly
 
 ---
 
+### 🧪 Week 11: AI Model Optimization
+
+* Adjust confidence thresholds
+* Reduce false alarms and missed detections
+
+---
+
+### ✅ Week 12: Alert Reliability Testing
+
+* Simulate real-world conditions
+* Ensure system sends consistent alerts without delay
+
+---
+
+### 🏫 Week 13: Field Testing
+
+* Deploy system in selected real-world environment (e.g., university lab)
+* Collect feedback, identify edge cases, improve reliability
+
+---
+
+### 📦 Week 14: Documentation & Packaging
+
+* Finalize README, wiring diagram, and usage guide
+* Clean and document code
+* Package system for presentation or deployment
+
+---
 
