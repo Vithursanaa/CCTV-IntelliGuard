@@ -142,7 +142,7 @@ This section outlines the week-by-week development plan for the CCTV IntelliGuar
 
 ### 🚶‍♂️ Week 5: Human Detection (Edge AI)
 
-* Integrate MobileNet SSD or YOLO-tiny
+* Integrate MobileNet SSD or YOLO
 * Classify objects and filter only human presence
 
 ---
