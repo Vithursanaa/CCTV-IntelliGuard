@@ -1,8 +1,9 @@
+#import libraries
 import cv2
 import numpy as np
 from ultralytics import YOLO
 
-# Load YOLOv8n (lightweight, good for CPU)
+# Load YOLOv8n 
 model = YOLO('yolov8n.pt')
 
 # Open the webcam
@@ -10,9 +11,19 @@ cap = cv2.VideoCapture(0)
 
 # Read the first frame to initialize motion detection
 ret, prev_frame = cap.read()
-prev_gray = cv2.cvtColor(prev_frame, cv2.COLOR_BGR2GRAY)
-prev_gray = cv2.GaussianBlur(prev_gray, (21, 21), 0)
 
+#Converts the first video frame (captured from the webcam) from color (BGR) to grayscale format.
+#cv2.cvtColor(....) - OpenCV function used to convert the color space of an image
+#prev_frame - original color image (from webcam), in BGR format by default
+#cv2.COLOR_BGR2GRAY- flag tells OpenCV to convert from BGR to Grayscale (shades of gray, no color)
+prev_gray = cv2.cvtColor(prev_frame, cv2.COLOR_BGR2GRAY)
+
+#Blurs the prev_gray image using a Gaussian filter
+#cv2.GaussianBlur(src, ksize, sigmaX) - src/input image, ksize/kernal size- size of the filter window, sigmaX/Standard deviation in X direction 
+#(21, 21) is a common choice for motion detection to ensure enough smoothing.
+prev_gray = cv2.GaussianBlur(prev_gray, (21, 21), 0) 
+
+#Reads a new frame from the webcam in each loop iteration, if no frame is read (e.g., camera error), the loop stops.
 while True:
     ret, frame = cap.read()
     if not ret:
