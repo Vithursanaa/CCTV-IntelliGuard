@@ -70,13 +70,22 @@ Attach this **AI-based external hardware** to CCTV camera to:
 | Real-Time Clock Scheduler  | To set active monitoring hours            |
 
 - Frigate: Focused on efficient recording (clips and snapshots) only when motion and objects (like humans, cars) are detected.
-  
+
+---
+
+## 🏗️ System Idea
+
+
+<img width="300" height="1000" alt="Blank diagram" src="https://github.com/user-attachments/assets/5be20669-8b63-477c-8cda-1f50001fc7dd" />
+
+---
 ---
 
 ## 🏗️ System Architecture
 
 
-<img width="300" height="1000" alt="Blank diagram" src="https://github.com/user-attachments/assets/5be20669-8b63-477c-8cda-1f50001fc7dd" />
+![ArcDia](https://github.com/user-attachments/assets/a0223083-38c3-434e-9bf3-c7cd0f91f38e)
+
 
 ---
 
@@ -117,97 +126,54 @@ This section outlines the week-by-week development plan for the CCTV IntelliGuar
 * Determine active hours, alert rules, and UI expectations
 * Confirm software stack and hardware specifications
 
----
 
 ### 🧾 Week 2: Procure Hardware
 
 * Purchase Raspberry Pi, Camera Module, Buzzer, Push Button, SD card, and other essentials
 
----
 
-### 🛠️ Week 3: Setup Raspberry Pi
+### 🛠️ Week 3: CCTV feed
 
-* Flash Raspberry Pi OS
+* Ask permission for CCTV
 * Install necessary libraries: OpenCV, FFmpeg, etc.
-* Validate camera feed and Pi GPIOs
+* Try to access the cctv feed through the laptop
 
----
 
 ### 👁️ Week 4: Motion Detection (OpenCV)
 
 * Frame differencing or background subtraction
 * Filter out irrelevant motion (e.g., light, leaves)
 
----
 
-### 🚶‍♂️ Week 5: Human Detection (Edge AI)
+### 🚶‍♂️ Week 5: Human Detection
 
 * Integrate MobileNet SSD or YOLO
 * Classify objects and filter only human presence
 
----
 
-### 🔊 Week 6: Alarm Trigger System
+### 📟 Week 6 – Hardware & Basic Setup (1 week)
+- Set up Raspberry Pi.
+- Get HDMI/VNC connection to display Pi’s output on laptop.
+- Connect CCTV feed and confirm Pi can stream and process video.
 
-* Activate buzzer during restricted hours on human detection
-* GPIO programming for buzzer control
 
----
+### 🧠 Weeks 7–10 – Model Training (4 weeks)
+- Retrain/tune existing detection model to classify **direction of movement** (entering vs. leaving room).
+- Collect labeled training data from CCTV footage.
+- Train, validate, and deploy the updated model on Raspberry Pi.
 
-### 🛑 Week 7: Manual Override System
 
-* Add physical push button to disable buzzer
-* Test debounce and button state reading via GPIO
+### 📱 Weeks 11–12 – App & Storage Integration (2 weeks)
+- Build mobile/desktop app interface for receiving alerts.
+- Buffer frames on detection, assemble into short video clips.
+- Store clips in Firestore with timestamps.
+- Push notifications through the app.
 
----
 
-### 🎥 Week 8: Timestamped Video/Image Clip
+### ✅ Weeks 13–14 – Final Testing & Documentation (2 weeks)
+- Test full pipeline: detection → clip creation → storage → alert.
+- Test under real-world conditions (different lighting, multiple people).
+- Write final documentation, diagrams, and deployment guide.
 
-* Use FFmpeg to save short video or snapshot on detection
-* Save with human-readable timestamp for traceability
 
----
-
-### ⏰ Week 9: RTC-Based Scheduling
-
-* Implement real-time monitoring scheduler
-* Monitor system only during configured restricted hours
-
----
-
-### 📲 Week 10: Alert Notification System
-
-* Integrate Telegram Bot or Twilio API
-* Send image/video to registered users’ devices instantly
-
----
-
-### 🧪 Week 11: AI Model Optimization
-
-* Adjust confidence thresholds
-* Reduce false alarms and missed detections
-
----
-
-### ✅ Week 12: Alert Reliability Testing
-
-* Simulate real-world conditions
-* Ensure system sends consistent alerts without delay
-
----
-
-### 🏫 Week 13: Field Testing
-
-* Deploy system in selected real-world environment (e.g., university lab)
-* Collect feedback, identify edge cases, improve reliability
-
----
-
-### 📦 Week 14: Documentation & Packaging
-
-* Finalize README, wiring diagram, and usage guide
-* Clean and document code
-* Package system for presentation or deployment
-
----
 
