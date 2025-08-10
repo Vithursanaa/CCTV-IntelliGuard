@@ -6,6 +6,7 @@ The system uses OpenCV for lightweight motion pre-detection, activating a YOLOv8
 It is trained to identify whether a person is entering or exiting specific monitored areas such as classrooms, labs, and offices. When an event is detected, timestamped video clips are stored in Firestore, and alerts with clip links are sent to a connected mobile application via Firebase Cloud Messaging (FCM).
 
 All processing is deployed on a Raspberry Pi, making it a compact, low-power, and cost-effective plug-in solution for upgrading existing CCTV systems.
+
 ---
 
 ## 📌 Problem Statement
