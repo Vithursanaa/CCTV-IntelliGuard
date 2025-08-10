@@ -1,7 +1,11 @@
-# CCTV IntelliGuard
+# 📹 CCTV IntelliGuard
+CCTV IntelliGuard is an edge-based smart surveillance enhancement module designed to work with existing CCTV cameras. It detects and classifies human motion in real time while keeping power and processing requirements minimal.
 
-A smart hardware module that connects to any existing CCTV camera and performs real-time human detection using edge AI (AI algorithms directly on edge devices, like smartphones or IoT sensors, allowing real-time processing and decision-making without cloud reliance). This system can automatically trigger alarms, save video clips with timestamp, or send alerts to a designated phone number or messaging app based on specific conditions.
+The system uses OpenCV for lightweight motion pre-detection, activating a YOLOv8 model—optimized with quantization and pruning—only when movement is detected. This approach ensures efficient computation without compromising detection accuracy.
 
+It is trained to identify whether a person is entering or exiting specific monitored areas such as classrooms, labs, and offices. When an event is detected, timestamped video clips are stored in Firestore, and alerts with clip links are sent to a connected mobile application via Firebase Cloud Messaging (FCM).
+
+All processing is deployed on a Raspberry Pi, making it a compact, low-power, and cost-effective plug-in solution for upgrading existing CCTV systems.
 ---
 
 ## 📌 Problem Statement
