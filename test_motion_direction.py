@@ -7,7 +7,6 @@ from ultralytics import YOLO
 model = YOLO('yolov8n.pt')
 
 # Open the webcam
-#Later change to cctv
 cap = cv2.VideoCapture(0)
 
 # Read the first frame to initialize motion detection
