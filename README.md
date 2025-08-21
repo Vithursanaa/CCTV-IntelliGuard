@@ -154,18 +154,18 @@ This section outlines the week-by-week development plan for the CCTV IntelliGuar
 
 * Integrate MobileNet SSD or YOLO
 * Classify objects and filter only human presence
+  
 
-
-### 📟 Week 6 – Hardware & Basic Setup (1 week)
-- Set up Raspberry Pi.
-- Get HDMI/VNC connection to display Pi’s output on laptop.
-- Connect CCTV feed and confirm Pi can stream and process video.
-
-
-### 🧠 Weeks 7–10 – Model Training (4 weeks)
+### 🧠 Weeks 6–9 – Model Training (4 weeks)
 - Retrain/tune existing detection model to classify **direction of movement** (entering vs. leaving room).
 - Collect labeled training data from CCTV footage.
 - Train, validate, and deploy the updated model on Raspberry Pi.
+
+
+### 📟 Week 10 – Hardware & Basic Setup (1 week)
+- Set up Raspberry Pi.
+- Get HDMI/VNC connection to display Pi’s output on laptop.
+- Connect CCTV feed and confirm Pi can stream and process video.
 
 
 ### 📱 Weeks 11–12 – App & Storage Integration (2 weeks)
