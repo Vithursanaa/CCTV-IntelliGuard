@@ -156,7 +156,9 @@ This section outlines the week-by-week development plan for the CCTV IntelliGuar
 * Classify objects and filter only human presence
   
 
-### 🧠 Weeks 6–9 – Model Training (4 weeks)
+### 🧠 Weeks 6–9 – Change the code / Model Training (4 weeks)
+- Add some changes in the code
+   or
 - Retrain/tune existing detection model to classify **direction of movement** (entering vs. leaving room).
 - Collect labeled training data from CCTV footage.
 - Train, validate, and deploy the updated model on Raspberry Pi.
