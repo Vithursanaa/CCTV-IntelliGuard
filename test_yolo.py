@@ -6,8 +6,9 @@ from ultralytics import YOLO
 # Load YOLOv8n 
 model = YOLO('yolov8n.pt')
 
-# Open the webcam
-cap = cv2.VideoCapture(0)
+# Notice the quotes "" and the %40 for @ in the password
+url = "rtsp://student1:Stu1%40cse@10.8.104.13:554/Streaming/Channels/101"
+cap = cv2.VideoCapture(url)
 
 # Read the first frame to initialize motion detection
 ret, prev_frame = cap.read()
