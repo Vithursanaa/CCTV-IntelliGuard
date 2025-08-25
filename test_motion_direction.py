@@ -74,12 +74,12 @@ while True:
                         if prev_cy < line_y and cy >= line_y:
                             cv2.putText(frame, "Entering", (x1, y1 - 10),
                                         cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255,0,0), 2)
-                            print("🚶‍♂️ Entering the room")
+                            print("🚶‍♂️Entering the room")
                         # If previously below the line and now above → leaving
                         elif prev_cy > line_y and cy <= line_y:
                             cv2.putText(frame, "Leaving", (x1, y1 - 10),
                                         cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0,0,255), 2)
-                            print("🚶‍♂️ Leaving the room")
+                            print("🚶‍♂️Leaving the room")
 
         # Update previous centers
         previous_centers = current_centers
