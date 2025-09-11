@@ -3,7 +3,7 @@ CCTV IntelliGuard is an edge-based smart surveillance enhancement module designe
 
 The system uses OpenCV for lightweight motion pre-detection, activating a YOLOv8 model—optimized with quantization and pruning—only when movement is detected. This approach ensures efficient computation without compromising detection accuracy.
 
-It is trained to identify whether a person is entering or exiting specific monitored areas such as classrooms, labs, and offices. When an event is detected, timestamped video clips are stored in Firestore, and alerts with clip links are sent to a connected mobile application via Firebase Cloud Messaging (FCM).
+It helpes to identify when a person is entering or exiting specific monitored areas such as classrooms, labs, and offices. When an event is detected, timestamped video clips are stored and alerts with clip links are sent to a connected mobile application ( via Firebase Cloud Messaging (FCM) ).
 
 All processing is deployed on a Raspberry Pi, making it a compact, low-power, and cost-effective plug-in solution for upgrading existing CCTV systems.
 
@@ -134,12 +134,12 @@ This section outlines the week-by-week development plan for the CCTV IntelliGuar
 
 ### 🧾 Week 2: Procure Hardware
 
-* Purchase Raspberry Pi, Camera Module, Buzzer, Push Button, SD card, and other essentials
-
+* Purchase Raspberry Pi, relavent cables, SD card, and other essentials
+* Ask permission for CCTV
+    
 
 ### 🛠️ Week 3: CCTV feed
 
-* Ask permission for CCTV
 * Install necessary libraries: OpenCV, FFmpeg, etc.
 * Try to access the cctv feed through the laptop
 
