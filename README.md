@@ -21,7 +21,7 @@ Most existing CCTV systems continuously record footage without intelligence. Thi
 
 Attach this **AI-based external hardware** to CCTV camera to:
 - Detects human presence and captures a photo/video snippet of the individual.
-- Sends captured images or video to registered mobile devices and directly to the device
+- Sends the captured videos  directly to the device
 - Triggers an alarm alert for unauthorized entries.
 - Includes a manual alarm off switch for authorized overrides.
 
@@ -144,35 +144,39 @@ This section outlines the week-by-week development plan for the CCTV IntelliGuar
 * Try to access the cctv feed through the laptop
 
 
-### 👁️ Week 4: Motion Detection (OpenCV)
-
-* Frame differencing or background subtraction
-* Filter out irrelevant motion (e.g., light, leaves)
-
-
-### 🚶‍♂️ Week 5: Human Detection
-
-* Integrate MobileNet SSD or YOLO
-* Classify objects and filter only human presence
+### 🤖 Weeks 4–5 – Motion + Human Detection (2 weeks)
+- Implement motion detection with OpenCV
+- Use motion as a trigger to avoid unnecessary YOLO processing
+- If motion detected → run YOLOv8n for object detection.
+- Filter results to detect only the person class.
+- Draw bounding boxes + labels when a human is detected.
+- Draw bounding boxes + labels when a human is detected.
   
 
-### 🧠 Weeks 6–9 – Change the code / Model Training (4 weeks)
-- Add some changes in the code
-   or
-- Retrain/tune existing detection model to classify **direction of movement** (entering vs. leaving room).
-- Collect labeled training data from CCTV footage.
-- Train, validate, and deploy the updated model on Raspberry Pi.
+📹👤 Weeks 6–7 – Human Detection with CCTV Feed (2 weeks)
+- Stream video from CCTV (RTSP).
+- Detect motion, If motion → run YOLOv8s to check for humans.
+- Record pre-event + event + after-event video clips with timestamps.
+- 08
 
 
-### 📟 Week 10 – Hardware & Basic Setup (1 week)
+### 📟 Week 8 – Hardware & Basic Setup (1 week)
 - Set up Raspberry Pi.
 - Get HDMI/VNC connection to display Pi’s output on laptop.
-- Connect CCTV feed and confirm Pi can stream and process video.
+- Connect CCTV feed and confirm Pi can do the previous computing
 
 
-### 📱 Weeks 11–12 – App & Storage Integration (2 weeks)
+🤖 Weeks 9-10 – Deployment on Raspberry Pi (2 weeks)
+- Install OpenCV, Ultralytics YOLOv8, and dependencies on Raspberry Pi.
+- Run full pipeline:
+   Motion detection
+   Human detection
+   Record pre-event + event + after-event video clips with timestamps save in  rasberrypi
+- Optimize for Raspberry Pi
+
+
+### 📱 Weeks 11–12 – App (2 weeks)
 - Build mobile/desktop app interface for receiving alerts.
-- Buffer frames on detection, assemble into short video clips.
 - Store clips in Firestore with timestamps.
 - Push notifications through the app.
 
