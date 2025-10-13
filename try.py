@@ -12,7 +12,7 @@ import os
 model = YOLO('yolov8s.pt')
 
 # RTSP stream URL
-url = "rtsp://student1:Stu1%40cse@10.8.104.13:554/Streaming/Channels/102"
+url = "rtsp://student1:Stu1%40cse@10.8.104.13:554/Streaming/Channels/102?tcp"
 
 # Open RTSP stream with FFMPEG
 cap = cv2.VideoCapture(url, cv2.CAP_FFMPEG)
