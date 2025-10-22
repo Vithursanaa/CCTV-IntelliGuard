@@ -114,7 +114,7 @@ cooldown = 250  # record 250 extra frames after motion stops (~10 sec @25fps)
 frames_after_motion = 0
 
 # Directory to save videos
-SAVE_DIR = "recorded_events_telegram"
+SAVE_DIR = "recorded_events_upgrade"
 os.makedirs(SAVE_DIR, exist_ok=True)
 
 # ------------------------------
