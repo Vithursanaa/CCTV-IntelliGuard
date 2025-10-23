@@ -6,18 +6,19 @@ import time
 import os
 import requests
 import subprocess
+from pydrive.auth import GoogleAuth
+from pydrive.drive import GoogleDrive
 
 # ------------------------------
 # TELEGRAM CONFIGURATION
 # ------------------------------
-BOT_TOKEN = "7754122601:AAGga5R6f1rd-C4zGNw2w88hS0zpg6ZpKoc"  
+BOT_TOKEN = "7754122601:AAGga5R6f1rd-C4zGNw2w88hS0zpg6ZpKoc"
 CHAT_ID = "1246393786"
 
 def send_telegram_message(text, retries=3):
     """Send Telegram text message with retries and error handling"""
     url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
     data = {"chat_id": CHAT_ID, "text": text}
-    
     for attempt in range(1, retries + 1):
         try:
             r = requests.post(url, data=data, timeout=10)
@@ -28,66 +29,63 @@ def send_telegram_message(text, retries=3):
                 print(f"[WARN] Telegram returned {r.status_code}: {r.text} (attempt {attempt}/{retries})")
         except requests.exceptions.RequestException as e:
             print(f"[ERROR] Telegram message failed (attempt {attempt}/{retries}): {e}")
-        time.sleep(3)  # wait before retry
-    
+        time.sleep(3)
     print("[FAIL] Could not send Telegram message after retries.")
 
+# ------------------------------
+# GOOGLE DRIVE CONFIGURATION
+# ------------------------------
+def setup_drive():
+    """Authenticate with Google Drive and return drive object"""
+    gauth = GoogleAuth()
+    gauth.LoadCredentialsFile("mycreds.txt")
 
-def send_telegram_video(video_path, caption="Human Detected!", retries=3):
-    """Send Telegram video with compression, retries, and error handling"""
+    if gauth.credentials is None:
+        print("🔐 No credentials found. Opening Google authentication link...")
+        gauth.CommandLineAuth()
+    elif gauth.access_token_expired:
+        print("🔄 Token expired. Refreshing...")
+        gauth.Refresh()
+    else:
+        gauth.Authorize()
+
+    gauth.SaveCredentialsFile("mycreds.txt")
+    return GoogleDrive(gauth)
+
+# Initialize Google Drive once
+drive = setup_drive()
+
+# Folder ID for CCTV IntelliGuard folder
+FOLDER_ID = "1dDQVhGP191-cgVVfep99DoRllymQLqV4"
+
+def upload_to_drive(video_path):
+    """Upload a video file to Google Drive folder"""
     if not os.path.exists(video_path):
-        print(f"[ERROR] Video file not found: {video_path}")
-        return
+        print(f"[ERROR] File not found for upload: {video_path}")
+        return False
 
-    # Compress if >49MB
-    size_mb = os.path.getsize(video_path) / (1024 * 1024)
-    if size_mb > 49:
-        compressed_path = video_path.rsplit('.', 1)[0] + "_compressed.mp4"
-        print(f"[INFO] Compressing video ({size_mb:.1f} MB) → {compressed_path} ...")
-        subprocess.run([
-            "ffmpeg", "-y", "-i", video_path,
-            "-vcodec", "libx264", "-crf", "30",
-            compressed_path
-        ])
-        video_path = compressed_path
-        size_mb = os.path.getsize(video_path) / (1024 * 1024)
-        print(f"[INFO] Compressed video size: {size_mb:.1f} MB")
+    filename = os.path.basename(video_path)
+    print(f"[INFO] Uploading {filename} to Google Drive...")
 
-    url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendVideo"
-    
-    for attempt in range(1, retries + 1):
-        try:
-            with open(video_path, "rb") as video_file:
-                r = requests.post(
-                    url,
-                    data={"chat_id": CHAT_ID, "caption": caption},
-                    files={"video": video_file},
-                    timeout=60
-                )
-            if r.status_code == 200:
-                print("[INFO] Telegram video sent successfully.")
-                return
-            else:
-                print(f"[WARN] Telegram API returned {r.status_code}: {r.text} (attempt {attempt}/{retries})")
-        except requests.exceptions.RequestException as e:
-            print(f"[ERROR] Telegram video failed (attempt {attempt}/{retries}): {e}")
-        time.sleep(5)
-    
-    print("[FAIL] Could not send Telegram video after {retries} attempts.")
+    try:
+        file_drive = drive.CreateFile({
+            'title': filename,
+            'parents': [{'id': FOLDER_ID}]
+        })
+        file_drive.SetContentFile(video_path)
+        file_drive.Upload()
+        print("[INFO] ✅ Upload successful to Google Drive.")
+        return True
+    except Exception as e:
+        print(f"[ERROR] Google Drive upload failed: {e}")
+        return False
 
 # ------------------------------
 # CCTV CONFIGURATION
 # ------------------------------
-# YOLO model: choose 'yolov8n.pt', 'yolov8s.pt', or 'yolov8m.pt'
 model = YOLO('yolov8s.pt')
-
-# RTSP stream URL
 url = "rtsp://student1:Stu1%40cse@10.8.104.13:554/Streaming/Channels/102?tcp"
 
-# Open RTSP stream with FFMPEG
-#cap = cv2.VideoCapture(url, cv2.CAP_FFMPEG)
-
-# FFmpeg subprocess to read raw BGR frames from RTSP
 ffmpeg_cmd = [
     "ffmpeg",
     "-i", url,
@@ -98,32 +96,20 @@ ffmpeg_cmd = [
 ]
 pipe = subprocess.Popen(ffmpeg_cmd, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
 
-# Set camera resolution (replace with your camera's actual width & height)
 width, height = 640, 480
-
-# Background subtractor for motion detection
 fgbg = cv2.createBackgroundSubtractorMOG2(history=500, varThreshold=25, detectShadows=True)
-
-# Frame buffer for pre-event recording (5 seconds @ 25 fps → 125 frames)
 frame_buffer = deque(maxlen=125)
 
-# Recording state
 recording = False
 record_frames = []
-cooldown = 250  # record 250 extra frames after motion stops (~10 sec @25fps)
+cooldown = 250
 frames_after_motion = 0
-
-# Directory to save videos
 SAVE_DIR = "recorded_events_upgrade_lab"
 os.makedirs(SAVE_DIR, exist_ok=True)
 
-# ------------------------------
-# FUNCTIONS
-# ------------------------------
 def motion_detected(frame):
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     fgmask = fgbg.apply(gray)
-    # noise reduction
     fgmask = cv2.erode(fgmask, None, iterations=2)
     fgmask = cv2.dilate(fgmask, None, iterations=2)
     contours, _ = cv2.findContours(fgmask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -152,23 +138,16 @@ print("[INFO] CCTV IntelliGuard started...")
 send_telegram_message("🔔 IntelliGuard Activated: CCTV monitoring started.")
 
 while True:
-    # Read raw frame from FFmpeg stdout
     raw_frame = pipe.stdout.read(width * height * 3)
     if len(raw_frame) < width * height * 3:
         print("[WARN] Frame not received, retrying...")
         time.sleep(0.5)
         continue
 
-    # Convert raw bytes to BGR image
     frame = np.frombuffer(raw_frame, np.uint8).reshape((height, width, 3))
-
-    # store in circular buffer
     frame_buffer.append(frame.copy())
-
-    # Step 1: motion detection
     motion = motion_detected(frame)
 
-    # Step 2: YOLO detection
     human_detected = False
     if motion:
         results = model(frame, verbose=False)
@@ -179,7 +158,6 @@ while True:
                     human_detected = True
                     break
 
-    # Step 3: recording logic
     if human_detected:
         if not recording:
             recording = True
@@ -195,12 +173,15 @@ while True:
             timestamp = int(time.time())
             filename = os.path.join(SAVE_DIR, f"event_{timestamp}.avi")
             save_video(record_frames, filename)
-            send_telegram_message("✅ Motion ended. Video saved.")
-            send_telegram_video(filename, caption="🎥 Event Recording")
+            send_telegram_message("✅ Motion ended. Video saved. Uploading to Drive...")
+            success = upload_to_drive(filename)
+            if success:
+                send_telegram_message("📤 Video successfully uploaded to Google Drive folder.")
+            else:
+                send_telegram_message("⚠️ Upload failed. Check system logs.")
             recording = False
             record_frames = []
 
-    # Optional: show preview
     cv2.imshow("CCTV Stream", frame)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
